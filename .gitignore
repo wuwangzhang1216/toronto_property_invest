@@ -40,6 +40,9 @@ build/
 *~
 .DS_Store
 
+# Claude settings
+.claude/
+
 # Logs
 *.log
 logs/
