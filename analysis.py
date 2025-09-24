@@ -3,6 +3,7 @@ import numpy as np
 from datetime import datetime
 import json
 import re
+import os
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
 import warnings
@@ -4250,13 +4251,15 @@ class ReportGenerator:
 </html>
 """
         
-        # Save report
+        # Save report to data directory
+        os.makedirs('data', exist_ok=True)
         filename = f'toronto_condo_analysis_enhanced_{self.timestamp}.html'
-        with open(filename, 'w', encoding='utf-8') as f:
+        filepath = os.path.join('data', filename)
+        with open(filepath, 'w', encoding='utf-8') as f:
             f.write(html_content)
         
-        print(f"✅ Enhanced HTML report generated: {filename}")
-        return filename
+        print(f"✅ Enhanced HTML report generated: {filepath}")
+        return filepath
     
 
 
@@ -4265,6 +4268,10 @@ class EnhancedCondoInvestmentPipeline:
     """Main pipeline orchestrating the entire analysis"""
     
     def __init__(self, csv_file: str, config: Optional[MarketConfig] = None):
+        # Check if csv_file is just a filename or a path
+        if not os.path.dirname(csv_file):
+            # If no directory specified, look in data folder
+            csv_file = os.path.join('data', csv_file)
         self.csv_file = csv_file
         self.config = config or MarketConfig()
         self.df = None

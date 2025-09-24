@@ -1071,11 +1071,19 @@ def scrape_condos_fully_parallel_improved(base_url, start_page=1, max_pages=5,
     return pd.DataFrame(all_condos) if all_condos else pd.DataFrame()
 
 def save_to_csv(df, filename=None):
+    # Ensure data directory exists
+    data_dir = 'data'
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+
     if filename is None:
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         filename = f'toronto_condos_robust_{timestamp}.csv'
-    df.to_csv(filename, index=False, encoding='utf-8')
-    return filename
+
+    # Save to data directory
+    filepath = os.path.join(data_dir, filename)
+    df.to_csv(filepath, index=False, encoding='utf-8')
+    return filepath
 
 def display_statistics(df):
     safe_print("\n📊 DATA STATISTICS\n" + "=" * 60)
